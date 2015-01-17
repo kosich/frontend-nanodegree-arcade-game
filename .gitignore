@@ -1,5 +1,5 @@
 *.sw*
 
-bower_components/*
-node_modules/*
-
+/bower_components/underscore/*
+!/bower_components/underscore/underscore.js
+/node_modules/*
