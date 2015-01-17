@@ -23,11 +23,16 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        lastTime;
+        lastTime,
+        world = global.world,
+        cellW = 101,
+        cellH = 83;
 
     canvas.width = 505;
     canvas.height = 606;
     doc.body.appendChild(canvas);
+
+    var allEnemies = world.enemies;
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -56,6 +61,8 @@ var Engine = (function(global) {
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
+
+        // return;
         win.requestAnimationFrame(main);
     };
 
@@ -91,9 +98,7 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
-        });
+        world.step( dt );
         player.update();
     }
 
@@ -107,16 +112,9 @@ var Engine = (function(global) {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
-        var rowImages = [
-                'images/water-block.png',   // Top row is water
-                'images/stone-block.png',   // Row 1 of 3 of stone
-                'images/stone-block.png',   // Row 2 of 3 of stone
-                'images/stone-block.png',   // Row 3 of 3 of stone
-                'images/grass-block.png',   // Row 1 of 2 of grass
-                'images/grass-block.png'    // Row 2 of 2 of grass
-            ],
-            numRows = 6,
-            numCols = 5,
+        var field = world.field,
+            numRows = field.height,
+            numCols = field.width,
             row, col;
 
         /* Loop through the number of rows and columns we've defined above
@@ -132,7 +130,7 @@ var Engine = (function(global) {
                  * so that we get the benefits of caching these images, since
                  * we're using them over and over.
                  */
-                ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+                ctx.drawImage(Resources.get(field[row][col].texture), col * cellW, row * cellH);
             }
         }
 
@@ -148,11 +146,12 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-        allEnemies.forEach(function(enemy) {
-            enemy.render();
-        });
+        allEnemies.forEach(renderEntity);
+        renderEntity( player );
+    }
 
-        player.render();
+    function renderEntity( e ){
+        ctx.drawImage(Resources.get(e.sprite), e.x * cellW, e.y * cellH - cellH/2);
     }
 
     /* This function does nothing but it could have been a good place to

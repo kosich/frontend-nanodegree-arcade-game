@@ -75,7 +75,10 @@
      * the same as calling load() on that URL.
      */
     function get(url) {
-        return resourceCache[url];
+        var r = resourceCache[url];
+        if ( !r )
+            throw 'resource wasn\'t found';
+        return r;
     }
 
     /* This function determines if all of the images that have been requested
