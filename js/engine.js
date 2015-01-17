@@ -21,9 +21,7 @@ var Engine = (function(global) {
      */
     var win = global.window,
         lastTime,
-        world = global.world;
-
-    renderEngine.init(  );
+        world;
 
 
     /* This function serves as the kickoff point for the game loop itself
@@ -64,7 +62,6 @@ var Engine = (function(global) {
      */
     function init() {
         reset();
-        lastTime = Date.now();
         main();
     }
 
@@ -91,19 +88,13 @@ var Engine = (function(global) {
      */
     function updateEntities(dt) {
         world.step( dt );
-        player.update();
 
-        player.cell.entities.forEach( function( e ){
-            if ( e === player )
-                return;
-
-            if ( e instanceof Enemy)
-                player.die();
-        } );
     }
 
     function reset() {
-        // noop
+        lastTime = Date.now();
+        world = global.world = new global.World( Map );
+        renderEngine.init(  );
     }
 
     /* Go ahead and load all of the images we know we're going to need to

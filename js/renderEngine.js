@@ -1,16 +1,16 @@
 (function( global ){
 
-    var RENDER_CELL_H = Math.min( global.world.field.height, 12 ),
-        RENDER_CELL_W = Math.min( global.world.field.width, 12 ),
-        RENDER_CELL_H_PADDING = Math.floor((RENDER_CELL_H - 1)/2);
+    var RENDER_CELL_H = 0,
+        RENDER_CELL_W = 0,
+        RENDER_CELL_H_PADDING = 0;
 
-    var world = global.world,
-        field = global.field,
-   allEnemies = world.enemies,
+    var world,
+        field,
+   allEnemies,
         cellW = 101,
         cellH = 83,
-        width = RENDER_CELL_W * cellW,
-        height = RENDER_CELL_H * cellH;
+        width = 0,
+        height= 0;
 
     var doc = global.document,
         canvas = doc.createElement('canvas'),
@@ -19,8 +19,18 @@
     var re = {};
 
     re.init = function re_init(  ){
+        RENDER_CELL_H = Math.min( global.world.field.height, 12 );
+        RENDER_CELL_W = Math.min( global.world.field.width, 12 );
+        RENDER_CELL_H_PADDING = Math.floor((RENDER_CELL_H - 1)/2);
+
+        world = global.world;
+        field = global.field;
+        allEnemies = world.enemies;
+        width = RENDER_CELL_W * cellW;
+        height = RENDER_CELL_H * cellH;
         canvas.width = width;
         canvas.height = height;
+
         doc.body.appendChild(canvas);
     };
 
@@ -34,7 +44,7 @@
             numCols = field.width,
             row = 0, col = 0;
 
-        var cRow = midRow = player.cell.y,
+        var cRow = midRow = world.player.cell.y,
             dB = field.height  - 1 - cRow,
             dT = cRow;
 
