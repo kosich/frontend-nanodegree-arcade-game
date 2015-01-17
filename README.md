@@ -1,6 +1,5 @@
-frontend-nanodegree-arcade-game
-===============================
+# ⑂ frontend-nanodegree-arcade-game
 
-Students should use this rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797
+*Udacity's game-engine fork, based on [OO JS course](https://www.udacity.com/course/viewer#!/c-ud015)*
 
-for self-checking their submission.
+**[Playable here](https://kosich.github.io/frontend-nanodegree-arcade-game)**
