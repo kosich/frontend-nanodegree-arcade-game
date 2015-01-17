@@ -6,23 +6,19 @@ function Enemy ( speed ) {
     this.resetPower();
 };
 
-Enemy.prototype.canInhabbit = function ( type ){
-    return type === 0;
-};
-
-Enemy.prototype.resetPower = function(){
-    this.power = 1 / this.speed;
-};
-
-Enemy.prototype.sprite = 'images/enemy-bug.png';
-
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
-    this.power -= dt;
-    if ( this.power < 0 ){
-        world.move ( this, { x : 1, y : 0 });
-        this.resetPower();
+_.extend( Enemy.prototype, {
+    canInhabbit : function ( type ){
+        return type === 0;
+    },
+    resetPower : function(){
+        this.power = 1 / this.speed;
+    },
+    sprite : 'images/enemy-bug.png',
+    update : function(dt) {
+        this.power -= dt;
+        if ( this.power < 0 ){
+            world.move ( this, { x : 1, y : 0 });
+            this.resetPower();
+        }
     }
-};
-
+} );

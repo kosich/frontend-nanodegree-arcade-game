@@ -1,7 +1,7 @@
 (function( global ){
 
-    var RENDER_CELL_H = Math.min( global.world.field.height, 7 ),
-        RENDER_CELL_W = Math.min( global.world.field.width, 7 ),
+    var RENDER_CELL_H = Math.min( global.world.field.height, 12 ),
+        RENDER_CELL_W = Math.min( global.world.field.width, 12 ),
         RENDER_CELL_H_PADDING = Math.floor((RENDER_CELL_H - 1)/2);
 
     var world = global.world,
@@ -48,21 +48,23 @@
         minRow = midRow - RENDER_CELL_H_PADDING;
         maxRow = midRow + RENDER_CELL_H_PADDING;
 
-        console.log('current at ', cRow, ' rendering from ', minRow, ' to ', maxRow); 
-
-        /* Loop through the number of rows and columns we've defined above
-         * and, using the rowImages array, draw the correct image for that
-         * portion of the "grid"
-         */
+        //======================================
+        var cell;
         for (row = minRow; row < maxRow; row++) {
             for (col = 0; col < numCols; col++) {
-                ctx.drawImage(Resources.get(field[row][col].texture), col * cellW, ( row - minRow )  * cellH);
+                cell = field[row][col];
+
+                if ( cell )
+                    ctx.drawImage(Resources.get(cell.texture), col * cellW, ( row - minRow ) * cellH );
             }
         }
 
         for (row = minRow; row < maxRow; row++) {
             for (col = 0; col < numCols; col++) {
-                renderEntities( col, ( row - minRow ), field[row][col].entities );
+                cell = field[row][col];
+
+                if ( cell )
+                    renderEntities( col, ( row - minRow ), field[row][col].entities );
             }
         }
 

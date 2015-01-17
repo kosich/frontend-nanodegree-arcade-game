@@ -1,26 +1,32 @@
 
 (function( global ){
-    var cellTypes = [
-        // 0 = ground
-        // 1 = grass
-        // 2 = water
-        [ 2, 2, 1, 0, 1, 2, 2 ],
-        [ 2, 2, 1, 0, 1, 2, 2 ],
-        [ 2, 2, 1, 0, 1, 2, 2 ],
-        [ 1, 1, 1, 0, 1, 1, 1 ],
-        [ 0, 0, 0, 0, 0, 0, 0 ],
-        [ 0, 0, 0, 0, 0, 0, 0 ],
-        [ 0, 0, 0, 0, 0, 0, 0 ],
-        [ 1, 1, 1, 0, 1, 1, 1 ],
-        [ 2, 2, 1, 0, 1, 2, 2 ],
-        [ 2, 2, 1, 0, 1, 2, 2 ]
-    ];
-
-    var spawnCoordinates = [
-        [ 0, 4 ],
-        [ 0, 5 ],
-        [ 0, 6 ]
-    ];
+    var map = (function(){
+        var _ = undefined;
+        return {
+            cellTypes : [
+                // 0 = ground
+                // 1 = grass
+                // 2 = water
+                [ 2, 2, 1, 0, 1, 2, 2 ],
+                [ 2, 2, 1, 0, 1, 2, 2 ],
+                [ 2, 2, 1, 0, 1, 2, 2 ],
+                [ 1, 1, 1, 0, 1, 1, 1 ],
+                [ 0, 0, 0, 0, 0, 0, 0 ],
+                [ _, _, _, 0, _, _, _ ],
+                [ 0, 0, 0, 0, 0, 0, 0 ],
+                [ 1, 1, 1, 0, 1, 1, 1 ],
+                [ _, 2, 1, 0, 1, 2, _ ],
+                [ _, 2, 1, 0, 1, 2, _ ],
+                [ 1, 1, 1, 0, 1, 1, 1 ],
+                [ 0, 0, 0, 0, 0, 0, 0 ]
+            ],
+            spawnCoordinates : [
+                [ 0, 4 ],
+                [ 0, 6 ]
+            ],
+            spawnPoint : [ 3, 0 ]
+        }
+    })();
 
     var textures = {
         '0'  : 'images/stone-block.png',
@@ -36,10 +42,19 @@
         this.entities = [];
     }
 
+    Cell.prototype.contains = function cell_contains ( Type ){
+        return !!this.entities.find( function( e ){
+            return e instanceof Type;
+        } );
+    };
+
     var world = global.world = {};
-    var field = world.field = cellTypes.map( function( row, y ){
+    var field = world.field = map.cellTypes.map( function( row, y ){
         return row.map( function( f, x ){
-            return new Cell( x, y, f );
+            if ( f === undefined )
+                return undefined;
+            else
+                return new Cell( x, y, f );
         } );
     } );
 
@@ -48,7 +63,7 @@
 
     world.move = function move ( object, direction ){
         var n = { x: object.cell.x + direction.x, y : object.cell.y + direction.y },
-            inBox = true;
+        inBox = true;
 
         var isEnemy = object != player;
 
@@ -65,6 +80,8 @@
         }
 
         var tCell = field[n.y][n.x];
+        if ( !tCell )
+            return;
 
         if( !object.canInhabbit( tCell.type ) )
             return;
@@ -73,7 +90,11 @@
     };
 
     world.addItem = function addItem ( x, y, item ){
-        putToCell( undefined, field[y][x], item );
+        var cell = field[y][x];
+        if (!cell)
+            throw 'helo';
+
+        putToCell( undefined, cell, item );
     }
 
     function putToCell( from, to, item ){
@@ -101,11 +122,11 @@
         // spawn AIs
         if ( enemies.length < 3 && Math.random() < .1 ){
 
-            var spc = Math.floor(Math.random() * spawnCoordinates.length);
-            if (spc == spawnCoordinates.length)
-                spc = spawnCoordinates.length -1;
+            var spc = Math.floor(Math.random() * map.spawnCoordinates.length);
+            if (spc == map.spawnCoordinates.length)
+                spc = map.spawnCoordinates.length -1;
 
-            var c = spawnCoordinates[ spc ];
+            var c = map.spawnCoordinates[ spc ];
 
             var cell = field[ c[1] ][ c[0] ];
 
