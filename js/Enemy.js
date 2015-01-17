@@ -1,9 +1,7 @@
 // Enemies our player must avoid
-function Enemy ( pos, speed ) {
+function Enemy ( speed ) {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    this.x = pos[0];
-    this.y = pos[1];
     this.speed = speed;
     this.resetPower();
 };

@@ -1,7 +1,5 @@
 function Player(){
     Enemy.apply( this, arguments );
-    this.y = 4;
-    this.x = 2;
     this.movementDirection = { x: 0, y: 0 };
 };
 
@@ -41,7 +39,12 @@ Player.prototype.handleInput = function handleInput( direction ) {
         this.movementDirection = _.extend({}, directions[ direction ]);
 };
 
+Player.prototype.die = function(){
+    alert( 'You\'ve just been bugged' );
+}
+
 var player = new Player( 6 );
+world.addItem( 2, 6, player );
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

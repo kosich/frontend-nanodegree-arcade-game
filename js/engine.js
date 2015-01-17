@@ -19,20 +19,12 @@ var Engine = (function(global) {
      * create the canvas element, grab the 2D context for that canvas
      * set the canvas elements height/width and add it to the DOM.
      */
-    var doc = global.document,
-        win = global.window,
-        canvas = doc.createElement('canvas'),
-        ctx = canvas.getContext('2d'),
+    var win = global.window,
         lastTime,
-        world = global.world,
-        cellW = 101,
-        cellH = 83;
+        world = global.world;
 
-    canvas.width = 505;
-    canvas.height = 606;
-    doc.body.appendChild(canvas);
+    renderEngine.init(  );
 
-    var allEnemies = world.enemies;
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -51,7 +43,7 @@ var Engine = (function(global) {
          * our update function since it may be used for smooth animation.
          */
         update(dt);
-        render();
+        renderEngine.render();
 
         /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
@@ -100,58 +92,14 @@ var Engine = (function(global) {
     function updateEntities(dt) {
         world.step( dt );
         player.update();
-    }
 
-    /* This function initially draws the "game level", it will then call
-     * the renderEntities function. Remember, this function is called every
-     * game tick (or loop of the game engine) because that's how games work -
-     * they are flipbooks creating the illusion of animation but in reality
-     * they are just drawing the entire screen over and over.
-     */
-    function render() {
-        /* This array holds the relative URL to the image used
-         * for that particular row of the game level.
-         */
-        var field = world.field,
-            numRows = field.height,
-            numCols = field.width,
-            row, col;
+        player.cell.entities.forEach( function( e ){
+            if ( e === player )
+                return;
 
-        /* Loop through the number of rows and columns we've defined above
-         * and, using the rowImages array, draw the correct image for that
-         * portion of the "grid"
-         */
-        for (row = 0; row < numRows; row++) {
-            for (col = 0; col < numCols; col++) {
-                /* The drawImage function of the canvas' context element
-                 * requires 3 parameters: the image to draw, the x coordinate
-                 * to start drawing and the y coordinate to start drawing.
-                 * We're using our Resources helpers to refer to our images
-                 * so that we get the benefits of caching these images, since
-                 * we're using them over and over.
-                 */
-                ctx.drawImage(Resources.get(field[row][col].texture), col * cellW, row * cellH);
-            }
-        }
-
-
-        renderEntities();
-    }
-
-    /* This function is called by the render function and is called on each game
-     * tick. It's purpose is to then call the render functions you have defined
-     * on your enemy and player entities within app.js
-     */
-    function renderEntities() {
-        /* Loop through all of the objects within the allEnemies array and call
-         * the render function you have defined.
-         */
-        allEnemies.forEach(renderEntity);
-        renderEntity( player );
-    }
-
-    function renderEntity( e ){
-        ctx.drawImage(Resources.get(e.sprite), e.x * cellW, e.y * cellH - cellH/2);
+            if ( e instanceof Enemy)
+                player.die();
+        } );
     }
 
     /* This function does nothing but it could have been a good place to
@@ -175,9 +123,4 @@ var Engine = (function(global) {
     ]);
     Resources.onReady(init);
 
-    /* Assign the canvas' context object to the global variable (the window
-     * object when run in a browser) so that developer's can use it more easily
-     * from within their app.js files.
-     */
-    global.ctx = ctx;
 })(this);
