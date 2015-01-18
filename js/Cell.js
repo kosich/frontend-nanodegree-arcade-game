@@ -1,7 +1,7 @@
 var textures = {
-    '0'  : 'images/stone-block.png',
-    '1'  : 'images/grass-block.png',
-    '2'  : 'images/water-block.png'
+    '0'  : 'Stone Block.png',
+    '1'  : 'Grass Block.png',
+    '2'  : 'Water Block.png'
 };
 
 function Cell (x, y, settings){

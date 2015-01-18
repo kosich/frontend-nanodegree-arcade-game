@@ -2,7 +2,11 @@
     'use strict';
 
     var World = global.World = function World ( map ){
+        var self = this;
+        this.enemies = [];
+        this.items = [];
         this.map = map;
+
         var field = this.field = map.cellTypes.map( function( row, y ){
             return row.map( function( f, x ){
                 if ( f === undefined )
@@ -12,10 +16,18 @@
             } );
         } );
 
+        map.items.forEach( function( itemDefinition ){
+            console.log( itemDefinition );
+            var type = global[itemDefinition.type];
+            var args = itemDefinition.args;
+            var item = Object.create( type.prototype );
+            type.apply( item, args);
+            self.addItem( itemDefinition.position[0], itemDefinition.position[1], item );
+        } );
+
         field.height = field.length;
         field.width = field[0].length;
 
-        this.enemies = [];
         this.player = new Player( );
         this.addItem( map.spawnPoint[0], map.spawnPoint[1], this.player );
 
@@ -52,10 +64,30 @@
 
             putToCell( object.cell, tCell, object );
         },
+        tellyportTo : function tellyportTo ( from, to, item ){
+            console.log( 'tellyported' );
+
+            putToCell( from.cell, to.cell, item );
+            this.destroy( from );
+            this.destroy( to );
+        },
+        findItem : function findItem ( type, comparator ){
+            return this.items.find( function( item ){
+                return (item instanceof type)
+                    && (!comparator || comparator.apply( this, arguments )) ;
+            });
+        },
         addItem : function addItem ( x, y, item ){
             var cell = this.field[y][x];
             if (!cell)
                 throw 'failed to add item to an empty cell';
+
+            if ( item instanceof Enemy ){
+                if ( item != this.player )
+                    this.enemies.add( item );
+            }
+            else 
+                this.items.push( item );
 
             putToCell( undefined, cell, item );
         },
@@ -94,10 +126,18 @@
 
                 if ( e instanceof Enemy)
                     self.player.die();
+
+                if ( e.activate )
+                    e.activate( self.player );
+
             } );
         },
         destroy : function destroy ( entity ){
-            this.enemies.splice( this.enemies.indexOf( entity ), 1 );
+            if ( entity instanceof Enemy ){
+                this.enemies.splice( this.enemies.indexOf( entity ), 1 );
+            } else {
+                this.items.splice( this.enemies.indexOf( entity ), 1 );
+            }
             putToCell(entity.cell, undefined, entity);
         }
 

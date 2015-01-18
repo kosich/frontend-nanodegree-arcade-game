@@ -21,7 +21,7 @@
     var re = {};
 
     re.init = function re_init(  ){
-        RENDER_CELL_H = Math.min( global.world.field.height, 7 );
+        RENDER_CELL_H = Math.min( global.world.field.height, 11 );
         RENDER_CELL_W = Math.min( global.world.field.width, 12 );
         RENDER_CELL_H_PADDING = Math.floor(RENDER_CELL_H/2);
 
