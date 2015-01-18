@@ -4,11 +4,12 @@ var textures = {
     '2'  : 'images/water-block.png'
 };
 
-function Cell (x, y, type){
-    this.type = type;
+function Cell (x, y, settings){
+    this.type = settings.type;
+    this.level = settings.level;
     this.x = x;
     this.y = y;
-    this.texture = textures[ type ];
+    this.texture = textures[ this.type ];
     this.entities = [];
 }
 

@@ -8,7 +8,7 @@
                 if ( f === undefined )
                     return undefined;
                 else
-                    return new Cell( x, y, f );
+                    return new Cell( x, y, { type : f, level : map.levels[y][x] } );
             } );
         } );
 
@@ -47,12 +47,15 @@
             if( !object.canInhabbit( tCell.type ) )
                 return;
 
+            if( Math.abs(object.cell.level - tCell.level) > 2 )
+                return;
+
             putToCell( object.cell, tCell, object );
         },
         addItem : function addItem ( x, y, item ){
             var cell = this.field[y][x];
             if (!cell)
-                throw 'helo';
+                throw 'failed to add item to an empty cell';
 
             putToCell( undefined, cell, item );
         },
@@ -98,8 +101,8 @@
             putToCell(entity.cell, undefined, entity);
         }
 
-
     } );
+
 
     function putToCell( from, to, item ){
         if ( from ){
@@ -130,8 +133,6 @@
 
         if ( e.keyCode in allowedKeys )
             world.player.handleInput(allowedKeys[e.keyCode]);
-        else 
-            console.log( e, e.keyCode );
     });
 
 

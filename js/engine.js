@@ -88,7 +88,6 @@ var Engine = (function(global) {
      */
     function updateEntities(dt) {
         world.step( dt );
-
     }
 
     function reset() {
