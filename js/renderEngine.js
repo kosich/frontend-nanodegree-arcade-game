@@ -1,8 +1,10 @@
 (function( global ){
+    'use strict';
 
     var RENDER_CELL_H = 0,
         RENDER_CELL_W = 0,
-        RENDER_CELL_H_PADDING = 0;
+        RENDER_CELL_H_PADDING = 0,
+        LEVEL_HEIGHT = 37; // height of a normal block
 
     var world,
         field,
@@ -10,7 +12,7 @@
         cellW = 101,
         cellH = 83,
         width = 0,
-        height= 0;
+       height = 0;
 
     var doc = global.document,
         canvas = doc.createElement('canvas'),
@@ -19,9 +21,9 @@
     var re = {};
 
     re.init = function re_init(  ){
-        RENDER_CELL_H = Math.min( global.world.field.height, 12 );
+        RENDER_CELL_H = Math.min( global.world.field.height, 11 );
         RENDER_CELL_W = Math.min( global.world.field.width, 12 );
-        RENDER_CELL_H_PADDING = Math.floor((RENDER_CELL_H - 1)/2);
+        RENDER_CELL_H_PADDING = Math.floor(RENDER_CELL_H/2);
 
         world = global.world;
         field = global.field;
@@ -65,7 +67,7 @@
                 cell = field[row][col];
 
                 if ( cell )
-                    ctx.drawImage(Resources.get(cell.texture), col * cellW, ( row - minRow ) * cellH );
+                    ctx.drawImage(Resources.get(cell.texture), col * cellW, ( row - minRow ) * cellH - cell.level * LEVEL_HEIGHT );
             }
         }
 
@@ -74,16 +76,16 @@
                 cell = field[row][col];
 
                 if ( cell )
-                    renderEntities( col, ( row - minRow ), field[row][col].entities );
+                    renderEntities( cell, col, ( row - minRow ));
             }
         }
 
 
     }
 
-    function renderEntities( x, y, items ) {
-        items.forEach( function( item ){
-            ctx.drawImage(Resources.get(item.sprite), x * cellW, y * cellH - cellH/2);
+    function renderEntities( cell, x, y ) {
+        cell.entities.forEach( function( item ){
+            ctx.drawImage(Resources.get(item.sprite), x * cellW, y * cellH - cellH/2 - cell.level * LEVEL_HEIGHT);
         } );
     }
 

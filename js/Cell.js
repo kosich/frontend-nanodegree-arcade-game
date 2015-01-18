@@ -1,14 +1,15 @@
 var textures = {
-    '0'  : 'images/stone-block.png',
-    '1'  : 'images/grass-block.png',
-    '2'  : 'images/water-block.png'
+    '0'  : 'Stone Block.png',
+    '1'  : 'Grass Block.png',
+    '2'  : 'Water Block.png'
 };
 
-function Cell (x, y, type){
-    this.type = type;
+function Cell (x, y, settings){
+    this.type = settings.type;
+    this.level = settings.level;
     this.x = x;
     this.y = y;
-    this.texture = textures[ type ];
+    this.texture = textures[ this.type ];
     this.entities = [];
 }
 

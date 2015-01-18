@@ -5,6 +5,10 @@
  * to load the same image multiple times.
  */
 (function() {
+    'use strict';
+
+    var RESOURCE_PREFIX = 'images/';
+
     var resourceCache = {};
     var loading = [];
     var readyCallbacks = [];
@@ -66,7 +70,7 @@
              * the images src attribute to the passed in URL.
              */
             resourceCache[url] = false;
-            img.src = url;
+            img.src = RESOURCE_PREFIX + url;
         }
     }
 
@@ -87,8 +91,7 @@
     function isReady() {
         var ready = true;
         for(var k in resourceCache) {
-            if(resourceCache.hasOwnProperty(k) &&
-               !resourceCache[k]) {
+            if(resourceCache.hasOwnProperty(k) && !resourceCache[k]) {
                 ready = false;
             }
         }

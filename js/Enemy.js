@@ -13,7 +13,7 @@ _.extend( Enemy.prototype, {
     resetPower : function(){
         this.power = 1 / this.speed;
     },
-    sprite : 'images/enemy-bug.png',
+    sprite : 'Enemy Bug.png',
     update : function(dt) {
         this.power -= dt;
         if ( this.power < 0 ){

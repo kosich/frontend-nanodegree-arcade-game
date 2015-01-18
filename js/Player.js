@@ -8,7 +8,7 @@ _.extend( Player.prototype, {
     canInhabbit : function canInhabbit( type ){
         return type in [ 0, 1 ];
     },
-    sprite : 'images/char-boy.png',
+    sprite : 'Character Boy.png',
     resetDirection : function resetDirection(){
         this.movementDirection.x = 0;
         this.movementDirection.y = 0;
@@ -26,6 +26,11 @@ _.extend( Player.prototype, {
     },
     die : function die(){
         console.warn( 'You\'ve just been bugged' );
+        if ( this.onDeathHandler )
+            this.onDeathHandler();
+    },
+    onDeath : function( handler ){
+        this.onDeathHandler = handler;
     }
 });
 
