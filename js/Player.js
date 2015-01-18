@@ -26,6 +26,11 @@ _.extend( Player.prototype, {
     },
     die : function die(){
         console.warn( 'You\'ve just been bugged' );
+        if ( this.onDeathHandler )
+            this.onDeathHandler();
+    },
+    onDeath : function( handler ){
+        this.onDeathHandler = handler;
     }
 });
 
