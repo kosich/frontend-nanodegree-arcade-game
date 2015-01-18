@@ -1,12 +1,12 @@
 var Engine = (function(global) {
     var win = global.window,
-        lastTime,
-        world,
-        rendering = true;
+    lastTime,
+    world,
+    rendering = true;
 
     function frame() {
         var now = Date.now(),
-            dt = (now - lastTime) / 1000.0;
+        dt = (now - lastTime) / 1000.0;
 
         update(dt);
         renderEngine.render();
@@ -48,8 +48,14 @@ var Engine = (function(global) {
         'Gem Green.png',
         'Gem Orange.png',
 
+        'Tree Short.png',
+        'Tree Tall.png',
+        'Tree Ugly.png',
+        'Rock.png',
+
         'Enemy Bug.png',
         'Character Boy.png'
+
     ]);
     Resources.onReady(init);
 

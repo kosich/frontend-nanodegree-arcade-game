@@ -59,7 +59,7 @@
             if( !object.canInhabbit( tCell.type ) )
                 return;
 
-            if( Math.abs(object.cell.level - tCell.level) > 2 )
+            if( Math.abs(object.cell.level - tCell.level) > .5 ) // cannot step on an object, thats level/2 heigher or lower
                 return;
 
             putToCell( object.cell, tCell, object );

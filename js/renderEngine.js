@@ -4,7 +4,7 @@
     var RENDER_CELL_H = 0,
         RENDER_CELL_W = 0,
         RENDER_CELL_H_PADDING = 0,
-        LEVEL_DIFF_COEFF = 10;
+        LEVEL_HEIGHT = 37; // height of a normal block
 
     var world,
         field,
@@ -67,7 +67,7 @@
                 cell = field[row][col];
 
                 if ( cell )
-                    ctx.drawImage(Resources.get(cell.texture), col * cellW, ( row - minRow ) * cellH - cell.level * LEVEL_DIFF_COEFF );
+                    ctx.drawImage(Resources.get(cell.texture), col * cellW, ( row - minRow ) * cellH - cell.level * LEVEL_HEIGHT );
             }
         }
 
@@ -85,7 +85,7 @@
 
     function renderEntities( cell, x, y ) {
         cell.entities.forEach( function( item ){
-            ctx.drawImage(Resources.get(item.sprite), x * cellW, y * cellH - cellH/2 - cell.level * LEVEL_DIFF_COEFF);
+            ctx.drawImage(Resources.get(item.sprite), x * cellW, y * cellH - cellH/2 - cell.level * LEVEL_HEIGHT);
         } );
     }
 
